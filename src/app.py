@@ -145,7 +145,8 @@ def create_consistency_gauge(consistency_score):
         mode="gauge+number",
         value=consistency_score,
         domain={'x': [0, 1], 'y': [0, 1]},
-        title={'text': "Consistency Score"},
+        title={'text': "Consistency Score", 'font': {'size': 20}},
+        number={'suffix': "%", 'font': {'size': 40}},
         gauge={
             'axis': {'range': [0, 100]},
             'bar': {'color': "#1f77b4"},
@@ -153,16 +154,14 @@ def create_consistency_gauge(consistency_score):
                 {'range': [0, 33], 'color': "#ffcccc"},
                 {'range': [33, 66], 'color': "#ffffcc"},
                 {'range': [66, 100], 'color': "#ccffcc"}
-            ],
-            'threshold': {
-                'line': {'color': "red", 'width': 4},
-                'thickness': 0.75,
-                'value': 90
-            }
+            ]
         }
     ))
     
-    fig.update_layout(height=250)
+    fig.update_layout(
+        height=280,
+        margin=dict(l=20, r=20, t=50, b=20)
+    )
     
     return fig
 
@@ -305,7 +304,12 @@ def main():
         
         # Original text (collapsible)
         with st.expander("📄 View Original Text"):
-            st.text(article_data["content"])
+            st.markdown(
+                f'<div style="white-space: pre-wrap; line-height: 1.8; '
+                f'padding: 1rem; background-color: #f8f9fa; '
+                f'border-radius: 8px; color: #212529;">{article_data["content"]}</div>',
+                unsafe_allow_html=True
+            )
         
         st.markdown("---")
         
@@ -354,6 +358,7 @@ def main():
             fig_gauge = create_consistency_gauge(results['consistency_score'])
             st.plotly_chart(fig_gauge, use_container_width=True)
             
+            # Contextual help based on algorithm
             if results['consistency_score'] == 100:
                 st.success("✅ Perfect consistency! Algorithm is fully deterministic.")
             elif results['consistency_score'] >= 80:
