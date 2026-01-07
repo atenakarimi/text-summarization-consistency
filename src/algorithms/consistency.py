@@ -8,7 +8,6 @@ of summarization algorithms across multiple runs.
 from typing import List, Dict, Tuple
 import numpy as np
 from .extractive import get_summarizer
-from src.utils.metrics import calculate_jaccard_similarity
 
 
 def run_consistency_experiment(
@@ -128,6 +127,8 @@ def calculate_pairwise_similarity(summaries: List[str]) -> List[Tuple[int, int, 
     Returns:
         List of tuples (index1, index2, similarity_score)
     """
+    from ..utils.metrics import calculate_jaccard_similarity
+    
     similarities = []
     n = len(summaries)
     

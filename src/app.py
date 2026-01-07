@@ -15,12 +15,15 @@ from pathlib import Path
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent))
 
-from algorithms import run_consistency_experiment, get_available_algorithms
-from utils import (
+from algorithms.consistency import run_consistency_experiment
+from algorithms.extractive import get_available_algorithms
+from utils.data import (
     load_sample_articles,
     get_all_titles,
     get_article_by_title,
-    get_text_statistics,
+    get_text_statistics
+)
+from utils.metrics import (
     calculate_consistency_metrics,
     calculate_length_stats
 )
@@ -86,8 +89,8 @@ def initialize_session_state():
 
 def create_similarity_heatmap(summaries):
     """Create heatmap showing pairwise similarity between summaries."""
-    from utils.metrics import calculate_jaccard_similarity
     import numpy as np
+    from utils.metrics import calculate_jaccard_similarity
     
     n = len(summaries)
     similarity_matrix = np.zeros((n, n))
