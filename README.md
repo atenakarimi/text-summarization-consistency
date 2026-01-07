@@ -1,6 +1,6 @@
 # Text Summarization Consistency Analyzer
 
-[![CI Pipeline](https://github.com/YOUR_USERNAME/text-summarization-consistency/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR_USERNAME/text-summarization-consistency/actions)
+[![CI Pipeline](https://github.com/atenakarimi/text-summarization-consistency/actions/workflows/ci.yml/badge.svg)](https://github.com/atenakarimi/text-summarization-consistency/actions)
 [![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
@@ -42,7 +42,7 @@ This is critical for:
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/text-summarization-consistency.git
+git clone https://github.com/atenakarimi/text-summarization-consistency.git
 cd text-summarization-consistency
 
 # Start with docker-compose
@@ -215,7 +215,7 @@ make all  # Install + Test + Docker Build
 
 ```bash
 # Clone and install
-git clone https://github.com/YOUR_USERNAME/text-summarization-consistency.git
+git clone https://github.com/atenakarimi/text-summarization-consistency.git
 cd text-summarization-consistency
 make install
 
@@ -242,7 +242,7 @@ If you use this tool in your research, please cite:
   author = {Karimi, Atena},
   title = {Text Summarization Consistency Analyzer},
   year = {2024},
-  url = {https://github.com/YOUR_USERNAME/text-summarization-consistency}
+  url = {https://github.com/atenakarimi/text-summarization-consistency}
 }
 ```
 
