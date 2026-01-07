@@ -127,7 +127,7 @@ def calculate_pairwise_similarity(summaries: List[str]) -> List[Tuple[int, int, 
     Returns:
         List of tuples (index1, index2, similarity_score)
     """
-    from ..utils.metrics import calculate_jaccard_similarity
+    from utils.metrics import calculate_jaccard_similarity
     
     similarities = []
     n = len(summaries)
