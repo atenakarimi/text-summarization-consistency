@@ -50,12 +50,12 @@ class TextRankSummarizer:
     
     def summarize(self, text: str, num_sentences: int = 3, seed: int = 42) -> str:
         """
-        Generate summary using TextRank algorithm.
+        Generate summary using TextRank algorithm with controlled variability.
         
         Args:
             text: Input text to summarize
             num_sentences: Number of sentences to extract
-            seed: Random seed for reproducibility (where applicable)
+            seed: Random seed for reproducibility (introduces variability)
             
         Returns:
             Summarized text as string
@@ -71,8 +71,19 @@ class TextRankSummarizer:
             summarizer = SumyTextRank(self.stemmer)
             summarizer.stop_words = self.stop_words
             
-            summary_sentences = summarizer(parser.document, num_sentences)
-            summary = " ".join(str(sentence) for sentence in summary_sentences)
+            # Get more sentences than needed to introduce variability
+            extra_sentences = min(3, num_sentences)
+            summary_sentences = list(summarizer(parser.document, num_sentences + extra_sentences))
+            
+            # Randomly select from top-ranked sentences to introduce variability
+            if len(summary_sentences) > num_sentences:
+                # Use indices to avoid comparison issues with Sentence objects
+                indices = list(range(len(summary_sentences)))
+                selected_indices = random.sample(indices, num_sentences)
+                selected_indices.sort()  # Maintain document order
+                summary_sentences = [summary_sentences[i] for i in selected_indices]
+            
+            summary = " ".join(str(sentence) for sentence in summary_sentences[:num_sentences])
             
             return summary.strip()
         except Exception as e:
@@ -104,12 +115,12 @@ class LexRankSummarizer:
     
     def summarize(self, text: str, num_sentences: int = 3, seed: int = 42) -> str:
         """
-        Generate summary using LexRank algorithm.
+        Generate summary using LexRank algorithm with controlled variability.
         
         Args:
             text: Input text to summarize
             num_sentences: Number of sentences to extract
-            seed: Random seed (for interface consistency, may not affect LexRank)
+            seed: Random seed for reproducibility (introduces variability)
             
         Returns:
             Summarized text as string
@@ -117,7 +128,7 @@ class LexRankSummarizer:
         if not text or not text.strip():
             return ""
         
-        # Set random seed for consistency (though LexRank is typically deterministic)
+        # Set random seed for consistency
         random.seed(seed)
         
         try:
@@ -125,8 +136,19 @@ class LexRankSummarizer:
             summarizer = SumyLexRank(self.stemmer)
             summarizer.stop_words = self.stop_words
             
-            summary_sentences = summarizer(parser.document, num_sentences)
-            summary = " ".join(str(sentence) for sentence in summary_sentences)
+            # Get more sentences than needed to introduce slight variability
+            extra_sentences = min(2, num_sentences)
+            summary_sentences = list(summarizer(parser.document, num_sentences + extra_sentences))
+            
+            # Randomly select from top-ranked sentences
+            if len(summary_sentences) > num_sentences:
+                # Use indices to avoid comparison issues with Sentence objects
+                indices = list(range(len(summary_sentences)))
+                selected_indices = random.sample(indices, num_sentences)
+                selected_indices.sort()  # Maintain document order
+                summary_sentences = [summary_sentences[i] for i in selected_indices]
+            
+            summary = " ".join(str(sentence) for sentence in summary_sentences[:num_sentences])
             
             return summary.strip()
         except Exception as e:

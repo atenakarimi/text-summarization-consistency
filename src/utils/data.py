@@ -97,6 +97,27 @@ def get_articles_by_category(category: str, data_path: Optional[str] = None) -> 
     return articles
 
 
+def count_sentences(text: str) -> int:
+    """
+    Count the number of sentences in a text.
+    
+    Args:
+        text: Input text
+        
+    Returns:
+        Number of sentences
+    """
+    import nltk
+    try:
+        nltk.data.find('tokenizers/punkt')
+    except LookupError:
+        import nltk
+        nltk.download('punkt', quiet=True)
+    
+    sentences = nltk.sent_tokenize(text)
+    return len(sentences)
+
+
 def get_available_categories(data_path: Optional[str] = None) -> List[str]:
     """
     Get list of available article categories.

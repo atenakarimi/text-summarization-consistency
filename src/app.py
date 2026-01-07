@@ -21,7 +21,8 @@ from utils.data import (
     load_sample_articles,
     get_all_titles,
     get_article_by_title,
-    get_text_statistics
+    get_text_statistics,
+    count_sentences
 )
 from utils.metrics import (
     calculate_consistency_metrics,
@@ -58,11 +59,14 @@ st.markdown("""
         margin: 1rem 0;
     }
     .summary-box {
-        background-color: #ffffff;
-        border: 1px solid #e0e0e0;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
         border-radius: 8px;
-        padding: 1rem;
+        padding: 1.2rem;
         margin: 0.5rem 0;
+        color: #212529;
+        line-height: 1.6;
+        font-size: 1rem;
     }
     .stButton>button {
         background-color: #1f77b4;
@@ -227,6 +231,21 @@ def main():
             help="Number of sentences to extract"
         )
         
+        # Check if article has enough sentences and show warning if needed
+        article_preview = get_article_by_title(selected_title)
+        if article_preview:
+            available_sentences = count_sentences(article_preview["content"])
+            if num_sentences > available_sentences:
+                st.warning(
+                    f"⚠️ This article only contains **{available_sentences} sentences**. "
+                    f"The algorithm will return the maximum available ({available_sentences} sentences) instead of {num_sentences}."
+                )
+            elif num_sentences == available_sentences:
+                st.info(
+                    f"ℹ️ This article contains exactly **{available_sentences} sentences**. "
+                    f"All runs will return identical summaries (100% consistency) since there's no variation possible."
+                )
+        
         # Run button
         st.markdown("---")
         run_button = st.button("🚀 Run Experiment", use_container_width=True)
@@ -373,13 +392,17 @@ def main():
         num_to_show = min(5, len(results['summaries']))
         
         for i in range(num_to_show):
-            with st.expander(f"Run {i+1} - Length: {results['lengths'][i]} chars"):
+            num_sentences = len([s for s in results['summaries'][i].split('.') if s.strip()])
+            preview = results['summaries'][i][:80] + '...' if len(results['summaries'][i]) > 80 else results['summaries'][i]
+            with st.expander(f"Run {i+1} - {num_sentences} sentences ({results['lengths'][i]} chars) - {preview}"):
                 st.markdown(f'<div class="summary-box">{results["summaries"][i]}</div>', unsafe_allow_html=True)
         
         if len(results['summaries']) > num_to_show:
             if st.button(f"Show all {len(results['summaries'])} summaries"):
                 for i in range(num_to_show, len(results['summaries'])):
-                    with st.expander(f"Run {i+1} - Length: {results['lengths'][i]} chars"):
+                    num_sentences = len([s for s in results['summaries'][i].split('.') if s.strip()])
+                    preview = results['summaries'][i][:80] + '...' if len(results['summaries'][i]) > 80 else results['summaries'][i]
+                    with st.expander(f"Run {i+1} - {num_sentences} sentences ({results['lengths'][i]} chars) - {preview}"):
                         st.markdown(f'<div class="summary-box">{results["summaries"][i]}</div>', unsafe_allow_html=True)
         
         st.markdown("---")
