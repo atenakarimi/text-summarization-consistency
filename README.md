@@ -5,6 +5,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
+> **⚡ TL;DR**: Run with one command: `docker-compose up` → Open http://localhost:8501
+
 A scientific tool for measuring and analyzing the **reproducibility and consistency** of text summarization algorithms. This project demonstrates how different extractive summarization methods behave when run multiple times on the same input, providing insights into their deterministic properties and result stability.
 
 ## 🎯 Purpose
@@ -38,30 +40,34 @@ This is critical for:
 
 ## 🚀 Quick Start
 
-### Option 1: Docker (Recommended)
+### Option 1: Docker (Recommended - One Command!)
 
 ```bash
 # Clone the repository
 git clone https://github.com/atenakarimi/text-summarization-consistency.git
 cd text-summarization-consistency
 
-# Start with docker-compose
+# Start with docker-compose (builds and runs automatically)
 docker-compose up
 
 # Open browser to http://localhost:8501
 ```
 
-That's it! The application will be available at [http://localhost:8501](http://localhost:8501).
+✅ **Docker runs on port 8501**: [http://localhost:8501](http://localhost:8501)
+
+That's it! No dependencies to install, everything is containerized.
 
 ### Option 2: Nix Shell (Reproducible Environment)
 
 ```bash
-# Enter Nix shell
+# Enter Nix shell (automatically sets up Python + dependencies)
 nix-shell
 
 # Run the application
 streamlit run src/app.py
 ```
+
+✅ **Default port 8501** or specify: `streamlit run src/app.py --server.port 8502`
 
 ### Option 3: Manual Installation
 
@@ -80,7 +86,30 @@ python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords')"
 streamlit run src/app.py
 ```
 
-## 📊 Usage
+✅ **Default port 8501** or specify custom port with `--server.port <PORT>`
+
+**Note**: If running both Docker and manual versions simultaneously, they will use different ports (Docker: 8501, manual can use 8502).
+
+## � Dependencies (Automatically Handled)
+
+All dependencies are automatically installed when using Docker or Nix. For manual installation, everything is in `requirements.txt`:
+
+**Core:**
+- Python 3.11+
+- Streamlit 1.32.0 (Web UI)
+- NLTK 3.8.1 (Text processing)
+- sumy 0.11.0 (Summarization algorithms)
+
+**Data & Analysis:**
+- pandas, numpy, scikit-learn
+- plotly, matplotlib (Visualizations)
+
+**Testing:**
+- pytest, pytest-cov (Testing framework)
+
+**All dependencies install automatically** with `pip install -r requirements.txt` or when using Docker/Nix.
+
+## �📊 Usage
 
 1. **Select an Article**: Choose from 10 sample articles or paste your own text
 2. **Choose Algorithm**: TextRank (graph-based), LexRank (similarity-based), or Luhn (frequency-based)
